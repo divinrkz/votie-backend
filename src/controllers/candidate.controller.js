@@ -1,52 +1,57 @@
-const {Vehicle, validate, validateUpdate} = require('../models/vehicle.model');
-const { hashPassword } = require('../utils/common.util');
+const {Candidate, validate} = require('../models/candidate.model');
 const { APIResponse } = require('../config/APIResponse.config');
 
 /**
- * Get all vehicle owner
+ * Get all candidates
  * @param {*} req 
  * @param {*} res 
  * @returns 
  */
 const getAll = async (req, res) => {
     try {
-        const vehicles = await Vehicle.find();
-        return res.status(200).send(APIResponse.success(vehicles));
+        const candidates = await Candidate.find();
+        return res.status(200).send(APIResponse.success(candidates));
     } catch (err) {
         return res.status(500).send(APIResponse.fail(err.toString()));
     } 
 };
 
 /**
- * Get by Id
+ * Get candidate by Id
  * @param {*} req 
  * @param {*} res 
  * @returns 
  */
 const getById = async (req, res) => {
     try {
-        const vehicle = await Vehicle.findById(req.params.id);
-        if (!vehicle) return res.status(404).send(APIResponse.fail(null, 'NOT FOUND')); 
+        const candidate = await Candidate.findById(req.params.id);
+        if (!candidate) return res.status(404).send(APIResponse.fail(null, 'NOT FOUND')); 
 
-        return res.status(200).send(APIResponse.success(vehicle));
+        return res.status(200).send(APIResponse.success(candidate));
     } catch (err) {
         return res.status(500).send(APIResponse.fail(err.toString()));
     } 
 };
 
 
+/**
+ * Create candidates
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 const create = async (req, res) => {
     try {
         const {error} = validate(req.body);
         if (error) return res.status(400).send(APIResponse.fail(error.details[0].message, 'VALIDATION ERROR')); 
 
         let existing;
-        existing =  await Vehicle.findOne({chasisNumber: req.body.chasisNumber})
-       if (existing)  return res.status(400).send(APIResponse.fail('Vehicle with Chasis already exists')); 
+        existing =  await Candidate.findOne({nationalId: req.body.nationalId})
+       if (existing)  return res.status(400).send(APIResponse.fail('Candidate with National ID already exists')); 
 
-        const vehicle = new Vehicle(req.body);
+        const candidate = new Candidate(req.body);
 
-        const saved = await vehicle.save();
+        const saved = await candidate.save();
 
         return res.status(200).send(APIResponse.success(saved));
     } catch (err) {
@@ -56,13 +61,18 @@ const create = async (req, res) => {
 };
 
 
-
+/**
+ * Deleter candidate by Id
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 const deleter = async (req, res) => {
     try {
-        const vehicle = await Vehicle.findById(req.params.id);
-        if (!vehicle) return res.status(404).send(APIResponse.fail(null, 'NOT FOUND'));  
+        const candidate = await Candidate.findById(req.params.id);
+        if (!candidate) return res.status(404).send(APIResponse.fail(null, 'NOT FOUND'));  
 
-        const deleted = await Vehicle.findByIdAndUpdate(vehicle._id, {isDeleted: true}, {new: true});
+        const deleted = await Candidate.findByIdAndUpdate(candidate._id, {isDeleted: true}, {new: true});
 
         return res.status(200).send(SUCCESS_RESPONSE(null, 'Deleted Successfully'));
     } catch (err) {

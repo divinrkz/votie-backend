@@ -4,7 +4,7 @@
 
 const router = require('express').Router();
 const { registerDefinition } = require('swaggiffy');
-const controllers = require('../controllers/owner.controller');
+const controllers = require('../controllers/candidate.controller');
 
 router.get('/',  controllers.getAll);
 
@@ -14,6 +14,6 @@ router.post('/' , controllers.create);
 
 router.delete('/:id', controllers.deleter);
 
-registerDefinition(router, {tags: 'Owners', mappedSchema: 'Owner', basePath: '/api/owners'});
+registerDefinition(router, {tags: 'Candidates', mappedSchema: 'Candidate', basePath: '/api/candidates'});
 
-exports.OwnerRoute = router;
+exports.CandidateRoute = router;

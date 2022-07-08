@@ -37,12 +37,12 @@ const getById = async (req, res) => {
 };
 
 /**
- * create user
+ * create voter
  * @param {*} req 
  * @param {*} res 
  * @returns 
  */
-const create = async (req, res) => {
+const createVoter = async (req, res) => {
     try {
         const {error} = validate(req.body);
         if (error) return res.status(400).send(APIResponse.fail(error.details[0].message, 'VALIDATION ERROR')); 
@@ -58,6 +58,43 @@ const create = async (req, res) => {
         if (existing)  return res.status(400).send(APIResponse.fail('User with Phone Number already exists')); 
 
         req.body.password = await hashPassword(req.body.password);
+        req.body.userType = EUserType.VOTER;
+
+        console.log(req.body);
+        const user = new User(req.body);
+
+        const saved = await user.save();
+
+        return res.status(200).send(APIResponse.success(saved));
+    } catch (err) {
+        console.error(err);
+        return res.status(500).send(APIResponse.fail(err.toString()));
+    } 
+};
+
+/**
+ * create admin
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+ const createAdmin = async (req, res) => {
+    try {
+        const {error} = validate(req.body);
+        if (error) return res.status(400).send(APIResponse.fail(error.details[0].message, 'VALIDATION ERROR')); 
+
+        let existing;
+         existing =  await User.findOne({nationalId: req.body.nationalId})
+        if (existing)  return res.status(400).send(APIResponse.fail('User with National ID already exists')); 
+
+        existing =  await User.findOne({email: req.body.email})
+        if (existing)  return res.status(400).send(APIResponse.fail('User with Email already exists')); 
+
+        existing =  await User.findOne({phoneNumber: req.body.phoneNumber})
+        if (existing)  return res.status(400).send(APIResponse.fail('User with Phone Number already exists')); 
+
+        req.body.password = await hashPassword(req.body.password);
+        req.body.userType = EUserType.ADMIN;
 
         console.log(req.body);
         const user = new User(req.body);
@@ -95,5 +132,5 @@ const deleter = async (req, res) => {
 
 
 module.exports = {
-    getAll, getById, create, deleter
+    getAll, getById, createAdmin, createVoter, deleter
 }

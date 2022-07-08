@@ -16,7 +16,7 @@ const voteSchema = mongoose.Schema({
     },
     voter: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Users',
+        ref: 'User',
         required: true
     },
     isDeleted: {
@@ -27,7 +27,8 @@ const voteSchema = mongoose.Schema({
 voteSchema.plugin(timestamps);
 
 /**
- * Vehicle Owner
+ * Vote
+ * 
  */
 const Vote = mongoose.model('Vote', voteSchema);
 

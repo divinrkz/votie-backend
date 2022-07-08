@@ -9,9 +9,8 @@ const bodyparser = require('body-parser');
 const { Swaggiffy } = require('swaggiffy')
 const {UserRoute} = require('./routes/users.route');
 const {AuthRoute} = require('./routes/auth.route');
-const {VehicleRoute} = require('./routes/vehicle.route');
-const {OwnerRoute} = require('./routes/owner.route');
-const {VehicleOwnerRoute} = require('./routes/vehicle-owner.route');
+const {CandidateRoute} = require('./routes/candidates.route');
+const {VoteRoute} = require('./routes/vote.route');
 const {AUTH_MIDDLEWARE} = require('./middlewares/auth.middleware')
 
 const PORT = process.env.PORT;
@@ -31,19 +30,14 @@ app.use('/api/users', UserRoute);
 app.use('/api/auth',  AuthRoute);
 
 /**
- * Vehicle router
+ * Candidates router
  */
-app.use('/api/vehicles', [AUTH_MIDDLEWARE], VehicleRoute);
+app.use('/api/candidates', [AUTH_MIDDLEWARE], CandidateRoute);
 
 /**
- * Onwners router
+ * Votes router
  */
-app.use('/api/owners',  [AUTH_MIDDLEWARE], OwnerRoute);
-
-/**
- * Vehicle Router
- */
-app.use('/api/vehicle-owners', [AUTH_MIDDLEWARE], VehicleOwnerRoute);
+app.use('/api/votes',  [AUTH_MIDDLEWARE], VoteRoute);
 
 
 /**

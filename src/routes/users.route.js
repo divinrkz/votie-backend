@@ -12,7 +12,8 @@ router.get('/',  [AUTH_MIDDLEWARE], controllers.getAll);
 
 router.get('/:id', [AUTH_MIDDLEWARE], controllers.getById);
 
-router.post('/' , controllers.create);
+router.post('/admin-user' , controllers.createAdmin);
+router.post('/voter' , controllers.createVoter);
 
 router.delete('/:id', [AUTH_MIDDLEWARE], controllers.deleter);
 

@@ -63,7 +63,7 @@ const validate = (data) => {
         names: Joi.string().required(),
         nationalId: Joi.string().regex(/^\d{16}$/).required(),
         missionStatement: Joi.string().required(),
-        gender: Joi.array().items(...getEnum(EGender)).required()
+        gender: Joi.string().valid(...getEnum(EGender)).required()
     }
 
     return Joi.validate(data, schema);
