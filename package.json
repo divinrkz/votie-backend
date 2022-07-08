@@ -1,0 +1,28 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Backend Repository",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "run:server": "git pull origin main",
+    "swaggiffy": "npx swaggiffy init -p 4008",
+    "dev": "nodemon --ignore '*swagger.json' src/app.js"
+  },
+  "author": "Divin Irakiza",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "joi": "^14.3.1",
+    "joi-objectid": "^3.0.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.7.7",
+    "mongoose-timestamp": "^0.6.0",
+    "nodemon": "^2.0.15",
+    "swaggiffy": "^1.0.5"
+  }
+}

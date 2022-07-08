@@ -1,13 +1,14 @@
 const mongoose = require('mongoose');
 const timestamps = require('mongoose-timestamp');
 const Joi = require('joi');
-const jwt = require('jsonwebtoken');
 const { registerSchema } = require('swaggiffy');
+const { EGender } = require('./enums');
+const { getEnum } = require('../utils/common.util');
 
 /**
- * Owner schema
+ * Candidate schema
  */
-const ownerSchema = mongoose.Schema({
+const candidateSchema = mongoose.Schema({
     names: {
         type: String,
         required: true
@@ -17,13 +18,16 @@ const ownerSchema = mongoose.Schema({
         unique: true,
         required: true
     },
-    phoneNumber: {
+    profilePicture: {
         type: String,
-        unique: true,
-        required: true,
     },
-    address: {
+    missionStatement: {
         type: String,
+        required: true
+    },
+    gender: {
+        type: String,
+        enum: getEnum(EGender),
         required: true
     },
     isDeleted: {
@@ -31,23 +35,23 @@ const ownerSchema = mongoose.Schema({
         default: false
     }
 });
-ownerSchema.plugin(timestamps);
+candidateSchema.plugin(timestamps);
 
 /**
- * Owner model
+ * Candidate model
  */
-const Owner = mongoose.model('Owner', ownerSchema);
+const Candidate = mongoose.model('Candidate', candidateSchema);
 
-const ownerDto = {
+const candidateDto = {
     names: '',
     nationalId: '',
-    phoneNumber: '',
-    address: ''
+    gender: '',
+    missionStatement: ''
 }
 /**
  * register swagger model
  */
-registerSchema('Owner', ownerDto);
+registerSchema('Candidate', candidateDto);
 
 /**
  * validate create owner input
@@ -58,8 +62,8 @@ const validate = (data) => {
     const schema = {
         names: Joi.string().required(),
         nationalId: Joi.string().regex(/^\d{16}$/).required(),
-        phoneNumber: Joi.string().regex(/^\d{10}$/).required(),
-        address: Joi.string().required()
+        missionStatement: Joi.string().required(),
+        gender: Joi.array().items(...getEnum(EGender)).required()
     }
 
     return Joi.validate(data, schema);
@@ -67,6 +71,6 @@ const validate = (data) => {
 
 
 module.exports = {
-    Owner,
+    Candidate,
     validate
 }

@@ -6,22 +6,17 @@ const { registerSchema } = require('swaggiffy');
 Joi.objectId = require("joi-objectid")(Joi);
 
 /**
- * vehicle Owner schema
+ * Vote schema
  */
-const vehicleOwnerSchema = mongoose.Schema({
-    vehicle: {
+const voteSchema = mongoose.Schema({
+    candidate: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Vehicle',
+        ref: 'Candidate',
         required: true
     },
-    owner: {
+    voter: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Owner',
-        required: true
-    },
-    plateNumber: {
-        type: String,
-        unique: true,
+        ref: 'Users',
         required: true
     },
     isDeleted: {
@@ -29,25 +24,25 @@ const vehicleOwnerSchema = mongoose.Schema({
         default: false
     }
 });
-vehicleOwnerSchema.plugin(timestamps);
+voteSchema.plugin(timestamps);
 
 /**
  * Vehicle Owner
  */
-const VehicleOwner = mongoose.model('VehicleOwner', vehicleOwnerSchema);
+const Vote = mongoose.model('Vote', voteSchema);
 
 /**
- * Vehicle owner dtop
+ * Candidate Id dto
  * 
  */
-const vehicleOwnerDto = {
-    vehicleId: '',
-    ownerId: '',
+const voteDto = {
+    candidateId: '',
+    voterId: '',
 }
 /**
  * register swagger model
  */
-registerSchema('VehicleOwner', vehicleOwnerDto);
+registerSchema('Vote', voteDto);
 
 /**
  * validate model
@@ -56,8 +51,8 @@ registerSchema('VehicleOwner', vehicleOwnerDto);
  */
 const validate = (data) => {
     const schema = {
-        vehicleId: Joi.objectId().required(),
-        ownerId: Joi.objectId().required(),
+        candidateId: Joi.objectId().required(),
+        voterId: Joi.objectId().required(),
     }
 
     return Joi.validate(data, schema);
@@ -66,6 +61,6 @@ const validate = (data) => {
 
 
 module.exports = {
-    VehicleOwner,
+    Vote,
     validate
 }
